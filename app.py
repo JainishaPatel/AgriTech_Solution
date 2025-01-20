@@ -88,7 +88,7 @@ def authorize():
    
 
 # Route for logging out the user (clears session and optionally logs out from Google)
-@app.route('/logout')
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)
@@ -109,7 +109,7 @@ def weather():
             city = 'mumbai'
   
         # API key for OpenWeatherMap 
-        api_key = 'bfded00eb9ee818074bc2745de187c87'
+        api_key = os.getenv('API_KEY')
 
         try:
     
@@ -175,6 +175,15 @@ def predict():
         return render_template('crop_prediction.html', prediction=None)
 
 
+# Endpoint to securely provide API key
+@app.route('/get_api_key', methods=['GET'])
+def get_api_key():
+    api_key = os.getenv('API_KEY')  # Fetching API key from .env
+    if api_key:
+        return jsonify({'api_key': api_key})
+    else:
+        return jsonify({'error': 'API key not found'}), 500
+
  
 
 # Route for automated crop prediction (accepts JSON data via POST and returns crop prediction as JSON)
@@ -183,7 +192,7 @@ def predict_auto():
     try:
         # Get JSON data from the request
         data = request.json
-        temperature = data['temperature'] # type: ignore # type: ignore
+        temperature = data['temperature'] # type: ignore 
         humidity = data['humidity'] # type: ignore
 
         # Log received data for debugging
