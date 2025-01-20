@@ -137,8 +137,14 @@
                   const lat = position.coords.latitude;
                   const lon = position.coords.longitude;
 
+                  // Fetch API key securely from backend
+                  const apiKeyResponse = await fetch('/get_api_key');
+                  const apiKeyData = await apiKeyResponse.json();
+                  const apiKey = apiKeyData.api_key;
+
+
                   // Fetch weather data
-                  const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=bfded00eb9ee818074bc2745de187c87`);
+                  const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
                   const weatherData = await weatherResponse.json();
 
                   const temperature = weatherData.main.temp;
